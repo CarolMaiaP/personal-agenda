@@ -1,7 +1,6 @@
 import { SignIn } from 'phosphor-react'
 import { FormEvent } from 'react'
 import { api } from '../services/api';
-import { loginSchema } from '../Validations/LoginValidation';
 import '../styles/Login.scss'
 
 export function Login(){
@@ -11,9 +10,12 @@ export function Login(){
       const formData = new FormData(event.target as HTMLFormElement)
       const data = Object.fromEntries(formData)
       
-      
       const authentication = await api.post("/api/auth/login", data)
-      console.log("aaaaaaaaaaaaaa", authentication.data)
+
+      localStorage.setItem("tokenType", authentication.data.tokenType)
+      localStorage.setItem("accessToken", authentication.data.accessToken)
+      localStorage.setItem("userId", authentication.data.id)
+    
       alert("Login efetuado com sucesso!")
     } catch (err) {
       console.log(`Erro ao efetuar login: ${err}`)
