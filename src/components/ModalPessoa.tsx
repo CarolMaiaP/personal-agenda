@@ -73,7 +73,7 @@ export function ModalPessoa({setOpenModal, people, setPeople}:any){
   return(
     <div className="modal-background">
         <div className="modal">
-          <h2>Criar novo contato<span onClick={() => setOpenModal(false)}><X size={30} /></span> </h2>
+          <h2>Criar nova pessoa<span onClick={() => setOpenModal(false)}><X size={30} /></span> </h2>
            <form onSubmit={handleCreatePeople}>
             <div className="form-field">
               <label htmlFor="name">Nome: </label>

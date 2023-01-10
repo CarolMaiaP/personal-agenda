@@ -21,8 +21,6 @@ export function ModalEditarContato({setOpenEditModal, editContact, contacts, set
       const formData = new FormData(event.target as HTMLFormElement)
       const data = Object.fromEntries(formData)
 
-      console.log("TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",contacts)
-
       const contactEdit = {
         "id": editContact.id,
         "pessoa": {
@@ -80,9 +78,9 @@ export function ModalEditarContato({setOpenEditModal, editContact, contacts, set
               <label htmlFor="telefone">Telefone: </label>
               <input id='telefone'  name="telefone" type="text" defaultValue={editContact.telefone} />
             </div>
-            <input type="submit" value="Criar" />
+            <input type="submit" value="Alterar" />
           </form>
         </div>
-      </div>
+    </div>
   )
 }

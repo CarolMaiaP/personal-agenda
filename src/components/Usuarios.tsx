@@ -5,17 +5,21 @@ import { api } from '../services/api';
 import '../styles/Usuarios.scss'
 import '../styles/ModalUsuario.scss'
 import '../styles/index.scss'
-import { cpfNumber, phoneNumber } from '../utils/validation';
 import { ModalUsuario } from './ModalUsuario';
+import { ModalEditarUsuario } from './ModalEditarUsuario';
 
 export function Usuarios(){
   interface userProps{
     id: number,
-    nome: string
+    nome: string,
+    email:string,
+    telefone:string
   }
 
   const [ users, setUsers ] = useState<userProps[]>([])
   const [ openModal, setOpenModal ] = useState(false)
+  const [ openEditModal, setOpenEditModal ] = useState(false)
+  const [ editUser, setEditUser ] = useState({})
 
   async function handleAuthentication(){
     try {
@@ -43,6 +47,11 @@ export function Usuarios(){
     }
   }
 
+  async function handleEditUser(user: any){
+    setEditUser(user)
+    setOpenEditModal(true)
+  }
+
 
   useEffect(() => {
     handleShowAllUsers()
@@ -57,9 +66,17 @@ export function Usuarios(){
       {openModal && <ModalUsuario setOpenModal={setOpenModal} users={users} setUsers={setUsers} />}
       {users.map((user) => {
         return(
-          <div className="user" key={user.id}>
-            <h3>{user.nome}</h3>
-            <Pencil size={20} />
+          <div key={user.id}>
+            <div className="user">
+              <div className='user-info'>
+                <h3>{user.nome}</h3>
+                <h4>{user.email}</h4>
+                <h4>{user.telefone}</h4>
+                <h4>{user.id}</h4>
+              </div>
+              <button onClick={() => handleEditUser(user)}><Pencil size={20} /></button>
+            </div>
+            {openEditModal && <ModalEditarUsuario setOpenEditModal={setOpenEditModal} editUser={editUser} users={users} setUsers={setUsers} />}
           </div>
         )
       })}
