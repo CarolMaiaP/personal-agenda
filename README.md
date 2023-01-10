@@ -2,8 +2,6 @@
 
 # Executar projeto 
 
-Para executar o projeto, deve seguir as instalações conforme os requisitos técnicos.
-
 Instalando as dependências do projeto
 
 ```bash
