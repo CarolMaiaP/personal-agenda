@@ -1,4 +1,4 @@
-# personal-agenda
+# personal-agenda (work in progress)
 
 # Executar projeto 
 
