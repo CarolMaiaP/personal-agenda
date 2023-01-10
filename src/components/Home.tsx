@@ -7,9 +7,20 @@ import '../styles/index.scss'
 import { Favoritos } from './Favoritos';
 import { ModalEditarContato } from './ModalEditarContato';
 
+interface contacsProps{
+  id: number,
+  telefone: string,
+  email: string
+  pessoa: {
+    nome: string,
+    telefone: string,
+    
+  }
+}
+
 export function Home(){
 
-  const [ contacts, setContacts ] = useState<any[]>([])
+  const [ contacts, setContacts ] = useState<contacsProps[]>([])
   const [ favorites, setFavorites ] = useState<any[]>([])
   const [ openModal, setOpenModal ] = useState(false)
   const [ openEditModal, setOpenEditModal ] = useState(false)
@@ -96,7 +107,7 @@ export function Home(){
     }
   }
 
-  async function handleDeleteContact({id}: {id:null}){
+  async function handleDeleteContact({id}: {id:number}){
     try {
       const { tokenType, accessToken } = await handleAuthentication()
 
@@ -114,7 +125,7 @@ export function Home(){
     }
   }
 
-  async function handleEditContact(contact:any){
+  async function handleEditContact(contact:contacsProps){
     setEditContact(contact)
     setOpenEditModal(true)
   }
@@ -150,7 +161,7 @@ export function Home(){
               <img src="https://github.com/CarolMaiaP.png" alt="foto do usuario" />
               <h3>{contact.pessoa.nome}</h3>
               <h2>{contact.id}</h2>
-              <h4>{contact.pessoa.nome}</h4>
+              <h4>{contact.email}</h4>
               <p><strong>{contact.telefone}</strong></p>
             </div>
             <div className="actions">

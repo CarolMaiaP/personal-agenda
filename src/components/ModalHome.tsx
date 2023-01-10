@@ -1,7 +1,15 @@
 import { X } from 'phosphor-react'
 import { FormEvent } from 'react';
 import { api } from '../services/api';
+import * as yup from 'yup'
 import '../styles/index.scss'
+import { phoneNumber } from '../utils/validation';
+
+const validationSchema = yup.object({
+  nome: yup.string(),
+  email: yup.string().email().required(),
+  telefone: yup.string().matches(phoneNumber).required(),
+})
 
 export function ModalHome({setOpenModal, contacts, setContacts}:any){
   async function handleAuthentication(){
@@ -29,6 +37,10 @@ export function ModalHome({setOpenModal, contacts, setContacts}:any){
         "telefone": data.telefone,
       }
 
+      // Validation
+      console.log(`formvalues ${JSON.stringify(newContact)}`)
+      const isValid = await validationSchema.validate(newContact)
+
       const { tokenType, accessToken } = await handleAuthentication()
 
       const newContactList = await api.post("/api/contato/salvar", newContact,{
@@ -42,7 +54,7 @@ export function ModalHome({setOpenModal, contacts, setContacts}:any){
       alert("Contato criado com sucesso!")
     } catch (err) {
       console.log(`Erro ao criar contato: ${err}`)
-      alert("Erro ao criar contato")
+      alert(`Erro ao criar pessoa: ${err}`)
     }
   }
 
