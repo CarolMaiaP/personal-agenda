@@ -53,6 +53,24 @@ export function Contato(){
     }
   }
 
+  async function handleDeleteContact({id}: {id:null}){
+    try {
+      const { tokenType, accessToken } = await handleAuthentication()
+
+      await api.delete(`/api/contato/remover/${id}`, {
+        headers: {
+          Authorization: `${tokenType} ${accessToken}`
+        }
+      });
+      
+      alert('Contato excluído com sucesso!')
+      handleGetAllContacts()
+    } catch (err) {
+      console.log(`Erro ao deletar: ${err}`)
+      alert(`Erro ao deletar ${err}`)
+    }
+  }
+
   useEffect(() => {
     handleGetAllContacts()
   }, [])
@@ -79,7 +97,7 @@ export function Contato(){
             <p><strong>{contact.usuario.telefone}</strong></p>
           </div>
           <div className="actions">
-            <button /*onClick={() => handleDeleteContact(contact)}*/><X size={27} /></button> 
+            <button onClick={() => handleDeleteContact(contact)}><X size={27} /></button> 
             <button><Pencil size={27} /></button>
             <button /*onClick={() => handleNewFavorite(contact)}*/><Star size={27} /></button>
           </div>
