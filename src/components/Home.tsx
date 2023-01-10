@@ -6,6 +6,7 @@ import { ModalHome } from './ModalHome';
 import '../styles/index.scss'
 import { Favoritos } from './Favoritos';
 import { ModalEditarContato } from './ModalEditarContato';
+import { getAuthUser } from '../services/auth';
 
 interface contacsProps{
   id: number,
@@ -25,26 +26,14 @@ export function Home(){
   const [ openModal, setOpenModal ] = useState(false)
   const [ openEditModal, setOpenEditModal ] = useState(false)
   const [ editContact, setEditContact ] = useState({})
-
-  async function handleAuthentication(){
-    try {
-      const authentication = await api.post("/api/auth/login", {username: "admin", password: "12345678"})
-      
-      return authentication.data;
-    } catch (err) {
-      console.log(`Erro ao autenticar: ${err}`)
-    }
-  }
-
+  
   async function handleGetAllContacts(){
     try{
-      const { tokenType, accessToken } = await handleAuthentication()
+      const config = await getAuthUser()
+      const url = "/api/contato/pesquisar"
+      const body = { termo: "" }
 
-      const usersSearch = await api.post("/api/contato/pesquisar", { termo: "" }, {
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`
-        }
-      })
+      const usersSearch = await api.post(url, body, config)
 
       setContacts(usersSearch.data)
     }catch(err){
@@ -54,13 +43,10 @@ export function Home(){
 
   async function handleGetAllFavorites(){
     try {
-      const { tokenType, accessToken } = await handleAuthentication()
+      const config = getAuthUser()
+      const url = "/api/favorito/pesquisar"
 
-      const favoritesSearch = await api.get("/api/favorito/pesquisar", {
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`
-        }
-      })
+      const favoritesSearch = await api.get(url, config)
 
       setFavorites(favoritesSearch.data)
     } catch (err) {
@@ -70,13 +56,10 @@ export function Home(){
 
   async function handleNewFavorite(contact:string){
     try {
-      const { tokenType, accessToken } = await handleAuthentication()
+      const url = "/api/favorito/salvar"
+      const config = getAuthUser()
 
-      await api.post("/api/favorito/salvar", contact, {
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`
-        }
-      })
+      await api.post(url, contact, config)
 
       setFavorites([...favorites, contact])
       alert("Contato adicionado aos favoritos")
@@ -92,13 +75,10 @@ export function Home(){
       const data = Object.fromEntries(formData)
       console.log("request",data)
     try {
-      const { tokenType, accessToken } = await handleAuthentication()
+      const url = "/api/contato/pesquisar"
+      const config = getAuthUser()
 
-      const searchedContact = await api.post("/api/contato/pesquisar", data, {
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`
-        }
-      })
+      const searchedContact = await api.post(url, data, config)
       setContacts(searchedContact.data)
       setFavorites(searchedContact.data)
       alert("Pesquisa realizada com sucesso!")
@@ -109,13 +89,10 @@ export function Home(){
 
   async function handleDeleteContact({id}: {id:number}){
     try {
-      const { tokenType, accessToken } = await handleAuthentication()
+      const url = `/api/contato/remover/${id}`
+      const config = getAuthUser()
 
-      await api.delete(`/api/contato/remover/${id}`, {
-        headers: {
-          Authorization: `${tokenType} ${accessToken}`
-        }
-      });
+      await api.delete(url, config);
       
       alert('Contato excluído com sucesso!')
       handleGetAllContacts()
