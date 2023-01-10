@@ -1,10 +1,11 @@
 import { Pencil, Plus, Star, Users, X } from "phosphor-react";
 import { FormEvent, useEffect, useState } from "react";
 import { api } from "../services/api";
+import { ModalHome } from "./ModalHome";
 
 export function Contato(){
   const [ contacts, setContacts ] = useState<any[]>([])
-
+  const [ openModal, setOpenModal ] = useState(false) 
 
   async function handleAuthentication(){
     try {
@@ -84,22 +85,26 @@ export function Contato(){
             <input type="submit" value="Procurar" /> 
           </form>
           <div className="create-contact">
-            <button /*onClick={() => setOpenModal(true)}*/><span><Plus size={20} weight="bold" /></span>Criar novo</button>
+            <button onClick={() => setOpenModal(true)}><span><Plus size={20} weight="bold" /></span>Criar novo</button>
           </div>
         </div>
+
+        {openModal && <ModalHome setOpenModal={setOpenModal} contacts={contacts} setContacts={setContacts} />}
+
       {contacts.map((contact) => (
-        <div className="user" key={contact.id}>
-          <div className="userInfo">
-            <img src="https://github.com/CarolMaiaP.png" alt="foto do usuario" />
-            <h3>{contact.pessoa.nome}</h3>
-            <h2>{contact.id}</h2>
-            <h4>{contact.pessoa.nome}</h4>
-            <p><strong>{contact.usuario.telefone}</strong></p>
-          </div>
-          <div className="actions">
-            <button onClick={() => handleDeleteContact(contact)}><X size={27} /></button> 
-            <button><Pencil size={27} /></button>
-            <button /*onClick={() => handleNewFavorite(contact)}*/><Star size={27} /></button>
+        <div key={contact.id}>
+          <div className="user">
+            <div className="userInfo">
+              <img src="https://github.com/CarolMaiaP.png" alt="foto do usuario" />
+              <h3>{contact.pessoa.nome}</h3>
+              <h2>{contact.id}</h2>
+              <h4>{contact.pessoa.nome}</h4>
+              <p><strong>{contact.usuario.telefone}</strong></p>
+            </div>
+            <div className="actions">
+              <button onClick={() => handleDeleteContact(contact)}><X size={27} /></button> 
+              <button><Pencil size={27} /></button>
+            </div>
           </div>
         </div>
       ))}
