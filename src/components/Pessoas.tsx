@@ -4,15 +4,27 @@ import { api } from "../services/api";
 import '../styles/Pessoas.scss'
 import '../styles/index.scss'
 import { ModalPessoa } from "./ModalPessoa";
+import { ModalEditarPessoa } from "./ModalEditarPessoa";
 
 interface pessoasProps{
   id: number,
   nome: string,
+  endereco: {
+    bairro: string,
+    cep: string,
+    cidade: string,
+    estado: string,
+    logradouro: string,
+    numero: number,
+    pais: string
+  }
 }
 
 export function Pessoas(){
   const [ people, setPeople ] = useState<pessoasProps[]>([]);
   const [ openModal, setOpenModal ] = useState(false)
+  const [ openEditModal, setOpenEditModal ] = useState(false)
+  const [ editPessoa, setEditPessoa ] = useState({})
 
   async function handleAuthentication(){
     try {
@@ -56,6 +68,11 @@ export function Pessoas(){
     }
   }
 
+  async function handleEditPerson(person:any){
+    setEditPessoa(person)
+    setOpenEditModal(true)
+  }
+
 
   useEffect(() => {
     handleShowAllPeople()
@@ -72,13 +89,26 @@ export function Pessoas(){
 
       {people.map((person) => {
         return(
-          <div className="pessoa" key={person.id}>
-            <h3>{person.nome}</h3>
-            <p>{person.id}</p>
-            <div className="actions">
-              <button><span><Pencil size={20} /></span></button>
-              <button onClick={() => handleDeletePerson(person)}><span><X size={20} /></span></button>
+          <div key={person.id}>
+            <div className="pessoa">
+                <h3>{person.nome}</h3>
+              <div className="pessoa-infos">
+                <h4>Endereço</h4><br></br>  
+                <p>{person.id}</p>
+                <p>Bairro: {person.endereco.bairro}</p>
+                <p>Cep: {person.endereco.cep}</p>
+                <p>Cidade: {person.endereco.cidade}</p>
+                <p>Estado: {person.endereco.estado}</p>
+                <p>Logradouro: {person.endereco.logradouro}</p>
+                <p>Número: {person.endereco.numero}</p>
+                <p>País: {person.endereco.pais}</p>
+              </div>
+              <div className="actions">
+                <button onClick={() => handleEditPerson(person)} ><span><Pencil size={20} /></span></button>
+                <button onClick={() => handleDeletePerson(person)}><span><X size={20} /></span></button>
+              </div>
             </div>
+            {openEditModal && <ModalEditarPessoa setOpenEditModal={setOpenEditModal} editPessoa={editPessoa} people={people} setPeople={setPeople} />}
           </div>
         )
       })}

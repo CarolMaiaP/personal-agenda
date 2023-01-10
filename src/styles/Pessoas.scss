@@ -23,8 +23,16 @@
 }
 
 .pessoa {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  margin-bottom: 1rem;
+  grid-template-columns: 2fr 2fr 1fr;
+  gap: 2rem;
+  border: 1px solid gray;
+  padding: 2rem;
+
+  .pessoa-infos p {
+    font-size: 14px;
+  }
 
   .actions {
     display: flex;
@@ -33,6 +41,7 @@
     button {
       line-height: 0;
       cursor: pointer;
+      max-height: 24px;
     }
   }
 }
