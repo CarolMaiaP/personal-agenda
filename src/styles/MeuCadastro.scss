@@ -1,0 +1,43 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+
+    label {
+      font-size: 14px;
+    }
+
+    input {
+      padding: 0.6rem;
+    }
+  }
+
+  input[type="submit"] {
+    background-color: rgb(50 159 173);
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    width: 70%;
+    padding: 1rem;
+
+    &:hover {
+      background-color: rgb(51, 171, 187);
+    }
+  }
+}
+
+@media screen and (max-width: "700px") {
+  form {
+    .form-field {
+      width: 90%;
+    }
+  }
+}
