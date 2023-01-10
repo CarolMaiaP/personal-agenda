@@ -1,11 +1,14 @@
-import { Pencil, Plus, Star, Users, X } from "phosphor-react";
+import { Pencil, Plus, Users, X } from "phosphor-react";
 import { FormEvent, useEffect, useState } from "react";
 import { api } from "../services/api";
+import { ModalEditarContato } from "./ModalEditarContato";
 import { ModalHome } from "./ModalHome";
 
 export function Contato(){
   const [ contacts, setContacts ] = useState<any[]>([])
   const [ openModal, setOpenModal ] = useState(false) 
+  const [ openEditModal, setOpenEditModal ] = useState(false)
+  const [ editContact, setEditContact ] = useState({})
 
   async function handleAuthentication(){
     try {
@@ -72,6 +75,11 @@ export function Contato(){
     }
   }
 
+  async function handleEditContact(contact:any){
+    setEditContact(contact)
+    setOpenEditModal(true)
+  }
+
   useEffect(() => {
     handleGetAllContacts()
   }, [])
@@ -99,13 +107,15 @@ export function Contato(){
               <h3>{contact.pessoa.nome}</h3>
               <h2>{contact.id}</h2>
               <h4>{contact.pessoa.nome}</h4>
+              <p>{contact.email}</p>
               <p><strong>{contact.usuario.telefone}</strong></p>
             </div>
             <div className="actions">
               <button onClick={() => handleDeleteContact(contact)}><X size={27} /></button> 
-              <button><Pencil size={27} /></button>
+              <button onClick={() => handleEditContact(contact)} ><Pencil size={27} /></button>
             </div>
           </div>
+          {openEditModal && <ModalEditarContato setOpenEditModal={setOpenEditModal} editContact={editContact} contacts={contacts} setContacts={setContacts} />}
         </div>
       ))}
     </div>
